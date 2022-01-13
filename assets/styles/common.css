@@ -459,7 +459,7 @@ input[type=number] {
     align-items: center;
     padding: 1rem;
     width: 100%;
-    background-color: var(--darkGray-c);
+    background-color: var(--mediumDarkGray-c);
     transition: all var(--short-t);
     cursor: pointer;
 }
