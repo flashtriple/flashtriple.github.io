@@ -132,57 +132,97 @@ SUBSCRIBE_OPTIONS.forEach( option => {
     }
 })
 
-// opening subscribe modal
-continueToSubscribe.onclick = () => {
-    modalBg.classList.add('active')
+// toggle modals
+const openModal = (modal) => {
+    modal.classList.remove('d-none')
+    modalBg.classList.remove('d-none')
     setTimeout(
         () => {
-            subscribe.classList.add('active')
+            modalBg.classList.add('active')
+        },
+        50
+    )
+    setTimeout(
+        () => {
+            modal.classList.add('active')
+        },
+        200
+    )
+}
+const closeModal = (modal) => {
+    modal.classList.remove('active')
+    setTimeout(
+        () => {
+            modalBg.classList.remove('active')
         },
         100
     )
+    setTimeout(
+        () => {
+            modalBg.classList.add('d-none')
+            modal.classList.add('d-none')
+        },
+        300
+    )
 }
-// toggle modals
-const toggleModal = (modal) => {
-    modal.classList.toggle('active')
-    modalBg.classList.toggle('active')
+// opening subscribe modal
+continueToSubscribe.onclick = () => {
+    openModal(subscribe)
 }
 // canceling modal
 modalBg.onclick = () => {
-    const activeModal = document.querySelector('.modal.active')
-    console.log(activeModal)
-    toggleModal(activeModal)
+    closeModal(document.querySelector('.modal.active'))
 }
 
 // inserting vote content and closing subscribeWrapper
 const votationQuery = () => {
     return (
         `
-        <div class="vote-card">
-        <div class="vote-card__img"><img src="img/albums/cancion_animal.jpg" alt=""></div>
-        <div class="vote-card__info">
-            <div class="vote-card__info__title">Canción animal</div>
-            <div class="vote-card__info__artist">Soda Stereo</div>
-            <div class="vote-card__info__album">Canción animal</div>
-            <div class="vote-card__info__year">1990</div>
-        </div>
-        </div>
-        <div class="vote-card">
-            <div class="vote-card__img"><img src="img/albums/signos.jpg" alt=""></div>
-            <div class="vote-card__info">
-                <div class="vote-card__info__title">Signos</div>
-                <div class="vote-card__info__artist">Soda Stereo</div>
-                <div class="vote-card__info__album">Signos</div>
-                <div class="vote-card__info__year">1986</div>
+        <div id="voteCardsWrapper">
+            <div class="vote-card">
+                <div class="vote-card__transparent-layer"></div>
+                <input hidden id="option1" class="vote-option" name="votation" type="radio" value="1" />
+                <div class="vote-card__img" style="background-image: url('img/options/1.jpg')"></div>
+                <div class="vote-card__info">
+                    <div class="vote-card__info__title">Canción animal</div>
+                    <div class="vote-card__info__artist">Soda Stereo</div>
+                    <div class="vote-card__info__album">Canción animal</div>
+                    <div class="vote-card__info__date">1990</div>
+                </div>
+            </div>
+            <div class="vote-card">
+                <div class="vote-card__transparent-layer"></div>
+                <input hidden id="option2" class="vote-option" name="votation" type="radio" value="2" />
+                <div class="vote-card__img" style="background-image: url('img/options/2.jpg')"></div>
+                <div class="vote-card__info">
+                    <div class="vote-card__info__title">Signos</div>
+                    <div class="vote-card__info__artist">Soda Stereo</div>
+                    <div class="vote-card__info__album">Signos</div>
+                    <div class="vote-card__info__date">1986</div>
+                </div>
             </div>
         </div>
-        <button class="standard-bt">Votar</button>
+        <button id="voteSubmit" class="standard-bt">Votar</button>
         `
     )
 }
+
 const votation = votationQuery()
+
+const votationSetup = () => {
+    voteCardsWrapper.onclick = (e) => {
+        if(e.target.classList.contains('vote-card__transparent-layer') && !e.target.parentElement.classList.contains('selected')){
+            if(voteCardsWrapper.querySelector('.selected')){
+                voteCardsWrapper.querySelector('.selected').classList.remove('selected')
+            }
+            e.target.parentElement.classList.toggle('selected', true)
+        }
+    }
+}
 
 continueToVote.onclick = () => {
     voteContent.innerHTML = votation
-    toggleModal(subscribe)
+    setTimeout(() => { closeModal(subscribe) }, 200)
+    votationSetup()
 }
+
