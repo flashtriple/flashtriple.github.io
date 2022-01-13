@@ -16,13 +16,14 @@ References
     --third-c: #8d8d8d;
     --mediumGray-c: #2b2b2b;
     --mediumGray-50-c: #2b2b2b85;
+    --mediumDarkGray-c: #141414;
     --darkGray-c: #070707;
     --white-c: #eeeeee;
     --black-c: black;
     --background-c: var(--black-c);
     --selectedOption-c: var(--mediumGray-c);
     --pressedBt-c: var(--mediumGray-c);
-    --header-c: var(--darkGray-c);
+    --header-c: var(--mediumDarkGray-c);
     --xs-w: 480px;
     --s-w: 768px;
     --m-w: 1024px;
