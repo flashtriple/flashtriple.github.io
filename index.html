@@ -12,21 +12,18 @@
 <body>
     <div id="app">
         <main id="main" class="page-wrapper">
-            <a href="https://www.instagram.com/stereotributo/" class="header-avatar">
-            </a>
-            <section id="home" class="page-wrapper">
-                <div class="header">
-                    <div class="header-text">
-                        <h1>Tributo a Soda</h1>
-                    </div>
+            <div class="header">
+                <div class="header-text">
+                    <h1 id="pageTitle" class="active">#VotacionSortereo</h1>
                 </div>
+                <a href="https://www.instagram.com/stereotributo/" class="header-avatar">
+                </a>
+            </div>
+            <div class="header-avatar-behind">
+            </div>
+            <section id="home" class="page-wrapper">
             </section>
             <section id="vote" class="page-wrapper">
-                <div class="header">
-                    <div class="header-text">
-                        <h1>#VotacionSortereo</h1>
-                    </div>
-                </div>
                 <div id="voteContent" class="content">
                     <p class="simple-text">Para registrar el voto y participar del sorteo, necesitamos número de teléfono o usuario de instagram. Se eliminarán los datos luego de finalizado el sorteo.</p>
                     <form>
@@ -43,13 +40,6 @@
             <section id="news" class="page-wrapper">
             </section>
             <section id="social" class="page-wrapper">
-                <div class="report__header">
-                    <div class="report__header-text">
-                        <h1>Reporte</h1>
-                    </div>
-                    <div class="report__header-avatar">
-                    </div>
-                </div>
                 <form id="voteForm">
                     <input type="file" id="imagesInput" name="images" maxlength="10" accept="image/*" multiple hidden/>
                     <label class="imagesBt" for="imagesInput">Cargar fotos</label>

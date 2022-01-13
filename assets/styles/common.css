@@ -215,7 +215,6 @@ section.active {
     left: 0;
     right: 0;
     padding: .5rem 1rem;
-    border-bottom: var(--secundary-c) 1px solid;
     background-color: var(--header-c);
     z-index: 3;
     box-shadow: 0px 0px 7px 2px var(--secundary-c);
@@ -226,8 +225,12 @@ section.active {
     justify-content: flex-start;
     flex: 1;
 }
-.header-text p {
-    align-self: flex-end;
+#pageTitle {
+    transform: translateY(-100%);
+    transition: all var(--short-t);
+}
+#pageTitle.active {
+    transform: translateX(0);
 }
 .header-avatar {
     position: fixed;
@@ -250,7 +253,7 @@ section.active {
     position: fixed;
     top: 0;
     right: .5rem;
-    z-index: 0;
+    z-index: 2;
     display: flex;
     height: 3.5rem;
     width: 3.5rem;

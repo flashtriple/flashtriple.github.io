@@ -12,12 +12,14 @@ const NAV_OPTIONS = [
     {
         name: 'home',
         icon: 'fas fa-home',
+        title: 'Tributo a Soda',
         render: () => {
         }
     },
     {
         name: 'vote',
         icon: 'fas fa-music',
+        title: '#VotacionSortereo',
         render: () => {}
     },
     /* {
@@ -39,19 +41,9 @@ const NAV_OPTIONS = [
 NAV_OPTIONS.forEach( item => {
     nav.insertAdjacentHTML('beforeend', 
     `
-        <button id='${item.name}Bt' data-section="${item.name}" class='nav__item'>
+        <button id='${item.name}Bt' data-section="${item.name}" data-title="${item.title}" class='nav__item'>
             <i class='${item.icon}'></i>
         </button>
-    `
-    )
-})
-// insert link logo halo on every page-wrapper
-const PAGE_WRAPPERS = main.querySelectorAll('.page-wrapper')
-PAGE_WRAPPERS.forEach( page => {
-    page.insertAdjacentHTML('beforeend', 
-    `
-        <div class="header-avatar-behind">
-        </div>
     `
     )
 })
@@ -62,18 +54,23 @@ voteBt.classList.toggle('active', true)
 // .active toggler for selected item
 const NAV_ITEMS = nav.querySelectorAll('.nav__item')
 let changingSection = false
+let BUTTON_TAGS = ['BUTTON', 'I']
 nav.onclick = (e) => {
-    if(e.target.tagName === 'BUTTON' || 'I'){
+    if(BUTTON_TAGS.includes(e.target.tagName)){
         let item = e.target
+        console.log(item)
         if(item.tagName === 'I'){
             item = item.parentElement
         }
         if(!item.classList.contains('active') && !changingSection){
             document.querySelectorAll('.active').forEach( item => {
                 item.classList.toggle('active', false)
+                pageTitle.classList.toggle('active', false)
             })
             changingSection = true
             setTimeout(() => {
+                pageTitle.innerHTML = item.dataset.title
+                pageTitle.classList.toggle('active', true)
                 document.querySelector(`#${item.dataset.section}`).classList.toggle('active', true)
                 item.classList.toggle('active', true)
                 changingSection = false
