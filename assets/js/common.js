@@ -258,7 +258,7 @@ continueToVote.onclick = () => {
         voteContent.innerHTML = `
         <a class="social-bt" onclick="goTo('https://www.youtube.com/channel/UCJwkofY0EYqYF51WvH0Tz3Q')"><i class="fab fa-youtube"></i>YouTube</a>
         <a class="social-bt" onclick="goTo('https://www.instagram.com/stereotributo/')"><i class="fab fa-instagram"></i>instagram</a>
-        <a class="social-bt" onclick="goTo('https://www.facebook.com/TributoStereo/)"><i class="fab fa-facebook"></i>facebook</a>
+        <a class="social-bt" onclick="goTo('https://www.facebook.com/TributoStereo/')"><i class="fab fa-facebook"></i>facebook</a>
         `
         localStorage.setItem('voted', true);
     }
