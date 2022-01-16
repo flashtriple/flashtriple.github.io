@@ -10,7 +10,7 @@ if(localStorage.getItem('voted')){
     <button id="dropLocalStorage" class="standard-bt">resetear prueba</button>`
     dropLocalStorage.onclick = () => {
         localStorage.clear()
-        window.location = 'http://localhost:5500/'
+        location.reload()
     }
 } else {
     voteContent.innerHTML = `
