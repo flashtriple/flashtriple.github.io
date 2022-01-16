@@ -4,10 +4,15 @@
 
 /* 1 - setup - start */
 
+const finalVoteContent = 
+`<h2>Tu voto fué procesado.<br>Ya estás participando del sorteo.</h2> 
+<a class="social-bt" onclick="goTo('https://www.youtube.com/channel/UCJwkofY0EYqYF51WvH0Tz3Q')"><i class="fab fa-youtube"></i>YouTube - Stereo Tributo</a>
+<a class="social-bt" onclick="goTo('https://www.instagram.com/stereotributo/')"><i class="fab fa-instagram"></i>instagram @stereotributo</a>
+<a class="social-bt" onclick="goTo('https://www.facebook.com/TributoStereo/')"><i class="fab fa-facebook"></i>facebook/TributoStereo</a>
+<button id="dropLocalStorage" class="standard-bt">resetear prueba</button>`
 // vote verification
 if(localStorage.getItem('voted')){
-    voteContent.innerHTML = `<h2>Su voto fué procesado.<br>Ya estás participando del sorteo.</h2>
-    <button id="dropLocalStorage" class="standard-bt">resetear prueba</button>`
+    voteContent.innerHTML = finalVoteContent
     dropLocalStorage.onclick = () => {
         localStorage.clear()
         location.reload()
@@ -250,16 +255,11 @@ const votationSetup = () => {
 const goTo = url => {
     window.open(url, '_blank')
 }
-
 continueToVote.onclick = () => {
     voteContent.innerHTML = votation
     voteSubmit.onclick = () => {
-        openModal(basicModal, 'Tu voto fué emitido y ya estás participando del sorteo.<br>Se llamará al numero registrado o al usuario de instagram para anunciar al ganador y corroborar identidad')
-        voteContent.innerHTML = `
-        <a class="social-bt" onclick="goTo('https://www.youtube.com/channel/UCJwkofY0EYqYF51WvH0Tz3Q')"><i class="fab fa-youtube"></i>YouTube</a>
-        <a class="social-bt" onclick="goTo('https://www.instagram.com/stereotributo/')"><i class="fab fa-instagram"></i>instagram</a>
-        <a class="social-bt" onclick="goTo('https://www.facebook.com/TributoStereo/')"><i class="fab fa-facebook"></i>facebook</a>
-        `
+        openModal(basicModal, 'Tu voto fué emitido y estás participando del sorteo.<br>Se llamará al numero registrado o al usuario de instagram para anunciar al ganador y corroborar identidad')
+        voteContent.innerHTML = finalVoteContent
         localStorage.setItem('voted', true);
     }
     setTimeout(() => { closeModal(subscribe) }, 200)
