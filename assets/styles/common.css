@@ -95,14 +95,17 @@ main {
     height: 100vh;
     background-color: var(--background-c)
 }
-#modalBg {
+.fixedBg {
     display:block;
-    opacity: 0;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
+    z-index: 5;
+}
+#modalBg {
+    opacity: 0;
     background-color: var(--mediumGray-50-c);
     z-index: 5;
     transition: all var(--short-t);
@@ -126,6 +129,7 @@ main {
     background-color: var(--black-c);
     box-shadow: 0 0 1rem -.25rem var(--black-c);
     transition: all var(--short-t);
+    overflow-y: visible;
 }
 .modal.active {
     opacity: 1;
@@ -491,6 +495,7 @@ input[type=number] {
     flex-direction: column;
     justify-content: space-between
 }
+.social-bt,
 .standard-bt {
     border-radius: .5rem;
     background-color: transparent;
@@ -506,10 +511,17 @@ input[type=number] {
     background-color: var(--mediumDarkGray-c);
     transition: all var(--short-t);
     cursor: pointer;
+    box-sizing: border-box;
+}
+.social-bt i {
+    margin-right: .5rem;
 }
 .standard-bt:active {
     background-color: var(--pressedBt-c);
     transform: scale(95%);
+}
+#modalMsg {
+    margin-bottom: 1.5rem;
 }
 #continueToVote {
     visibility: hidden;
@@ -548,4 +560,35 @@ input[type=number] {
 .fs-2 {
     font-size: 2rem !important;
     line-height: 2.25rem
+}
+
+/* spinner */
+#loading {
+    background-color: var(--background-c);
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+.lds-dual-ring {
+    display: inline-block;
+    width: 5rem;
+    height: 5rem;
+}
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    border: .4rem solid var(--secundary-c);
+    border-color: var(--secundary-c) transparent var(--secundary-c) transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

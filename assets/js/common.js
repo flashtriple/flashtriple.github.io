@@ -1,9 +1,37 @@
-// 1 - nav constructor
+// 1 - setup
 // 2 - uploading img preview
 // 3 - subscribe modal
 
+/* 1 - setup - start */
 
-/* 1 - nav constructor - start */
+// vote verification
+if(localStorage.getItem('voted')){
+    voteContent.innerHTML = `<h2>Su voto fué procesado y se encuentra participando del sorteo.</h2>
+    <button id="dropLocalStorage" class="standard-bt">resetear prueba</button>`
+    dropLocalStorage.onclick = () => {
+        localStorage.clear()
+        window.location = 'http://localhost:5500/'
+    }
+} else {
+    voteContent.innerHTML = `
+    <p class="simple-text">Para registrar el voto y participar del sorteo, necesitamos número de teléfono o usuario de instagram. Se eliminarán los datos luego de finalizado el sorteo.</p>
+    <form>
+        <div class="user-input data">
+            <label>@</label><input type="text" class="input" placeholder="Usuario de instagram" maxlength="40"/>
+        </div>
+        <div class="user-input data">
+            <label><i class="fab fa-whatsapp"></i></label><input type="number" class="input" placeholder="Teléfono" maxlength="15"/>
+        </div>
+    </form>
+    <button id="continueToSubscribe" class="standard-bt">Continuar</button>
+    `
+    // opening subscribe modal
+    continueToSubscribe.onclick = () => {
+        openModal(subscribe)
+    }
+}
+
+// nav constructor
 
 // inserting nav bts for logged user
 
@@ -133,7 +161,10 @@ SUBSCRIBE_OPTIONS.forEach( option => {
 })
 
 // toggle modals
-const openModal = (modal) => {
+const openModal = (modal, msg) => {
+    if(modal.id === 'basicModal'){
+        modal.firstElementChild.innerHTML = msg
+    }
     modal.classList.remove('d-none')
     modalBg.classList.remove('d-none')
     setTimeout(
@@ -164,10 +195,6 @@ const closeModal = (modal) => {
         },
         300
     )
-}
-// opening subscribe modal
-continueToSubscribe.onclick = () => {
-    openModal(subscribe)
 }
 // canceling modal
 modalBg.onclick = () => {
@@ -220,15 +247,25 @@ const votationSetup = () => {
     }
 }
 
+const goTo = url => {
+    window.open(url, '_blank')
+}
+
 continueToVote.onclick = () => {
     voteContent.innerHTML = votation
     voteSubmit.onclick = () => {
-        openModal(voteSuccess)
-        voteContent.innerHTML = ``
+        openModal(basicModal, 'Tu voto fué emitido y ya estás participando del sorteo.<br>Se llamará al numero registrado o al usuario de instagram para anunciar al ganador y corroborar identidad')
+        voteContent.innerHTML = `
+        <a class="social-bt" onclick="goTo('https://www.youtube.com/channel/UCJwkofY0EYqYF51WvH0Tz3Q')"><i class="fab fa-youtube"></i>YouTube</a>
+        <a class="social-bt" onclick="goTo('https://www.instagram.com/stereotributo/')"><i class="fab fa-instagram"></i>instagram</a>
+        <a class="social-bt" onclick="goTo('https://www.facebook.com/TributoStereo/)"><i class="fab fa-facebook"></i>facebook</a>
+        `
+        localStorage.setItem('voted', true);
     }
     setTimeout(() => { closeModal(subscribe) }, 200)
     votationSetup()
 }
-toInstagram.onclick = () => {
-    window.open('https://www.instagram.com/stereotributo/', '_blank')
+const toggleLoader = bool => {
+    loading.classList.toggle('d-none', bool)
 }
+setTimeout(()=>{toggleLoader(true)}, 600)
