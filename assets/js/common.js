@@ -222,7 +222,13 @@ const votationSetup = () => {
 
 continueToVote.onclick = () => {
     voteContent.innerHTML = votation
+    voteSubmit.onclick = () => {
+        openModal(voteSuccess)
+        voteContent.innerHTML = ``
+    }
     setTimeout(() => { closeModal(subscribe) }, 200)
     votationSetup()
 }
-
+toInstagram.onclick = () => {
+    window.open('https://www.instagram.com/stereotributo/', '_blank')
+}
