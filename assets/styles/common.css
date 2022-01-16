@@ -564,11 +564,15 @@ input[type=number] {
 
 /* spinner */
 #loading {
+    display: none;
     background-color: var(--background-c);
-    display: flex;
     align-items: center;
-    justify-content: center
+    justify-content: center;
 }
+#loading.visible {
+    display: flex !important;
+}
+
 .lds-dual-ring {
     display: inline-block;
     width: 5rem;

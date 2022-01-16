@@ -261,11 +261,15 @@ continueToVote.onclick = () => {
         openModal(basicModal, 'Tu voto fué emitido y estás participando del sorteo.<br>Se llamará al numero registrado o al usuario de instagram para anunciar al ganador y corroborar identidad')
         voteContent.innerHTML = finalVoteContent
         localStorage.setItem('voted', true);
+        dropLocalStorage.onclick = () => {
+            localStorage.clear()
+            location.reload()
+        }
     }
     setTimeout(() => { closeModal(subscribe) }, 200)
     votationSetup()
 }
-const toggleLoader = bool => {
-    loading.classList.toggle('d-none', bool)
+const isLoading = bool => {
+    loading.classList.toggle('visible', bool)
 }
-setTimeout(()=>{toggleLoader(true)}, 600)
+setTimeout(()=>{ isLoading(false) }, 600)
