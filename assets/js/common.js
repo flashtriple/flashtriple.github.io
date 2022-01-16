@@ -6,7 +6,7 @@
 
 // vote verification
 if(localStorage.getItem('voted')){
-    voteContent.innerHTML = `<h2>Su voto fué procesado y se encuentra participando del sorteo.</h2>
+    voteContent.innerHTML = `<h2>Su voto fué procesado.<br>Ya estás participando del sorteo.</h2>
     <button id="dropLocalStorage" class="standard-bt">resetear prueba</button>`
     dropLocalStorage.onclick = () => {
         localStorage.clear()
