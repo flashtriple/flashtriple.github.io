@@ -5,9 +5,10 @@
 /* 1 - setup - start */
 
 const finalVoteContent = 
-`<h2>Tu voto fué procesado.<br>Ya estás participando del sorteo.</h2> 
-<a class="social-bt" onclick="goTo('https://www.youtube.com/channel/UCJwkofY0EYqYF51WvH0Tz3Q')"><i class="fab fa-youtube"></i>YouTube - Stereo Tributo</a>
+`
+<div class="simple-text fs-1dot25">Ya votaste y estás participando del sorteo<br><br>Te invitamos a seguirnos en las redes para estar en contacto y ver el material audiovisual.</div>
 <a class="social-bt" onclick="goTo('https://www.instagram.com/stereotributo/')"><i class="fab fa-instagram"></i>instagram @stereotributo</a>
+<a class="social-bt" onclick="goTo('https://www.youtube.com/channel/UCJwkofY0EYqYF51WvH0Tz3Q')"><i class="fab fa-youtube"></i>YouTube - Stereo Tributo</a>
 <a class="social-bt" onclick="goTo('https://www.facebook.com/TributoStereo/')"><i class="fab fa-facebook"></i>facebook/TributoStereo</a>
 <button id="dropLocalStorage" class="standard-bt">resetear prueba</button>`
 // vote verification
@@ -22,17 +23,21 @@ if(localStorage.getItem('voted')){
     <p class="simple-text">Para registrar el voto y participar del sorteo, necesitamos número de teléfono o usuario de instagram. Se eliminarán los datos luego de finalizado el sorteo.</p>
     <form>
         <div class="user-input data">
-            <label>@</label><input type="text" class="input" placeholder="Usuario de instagram" maxlength="40"/>
+            <label>@</label><input id="igInput" type="text" class="input" placeholder="Usuario de instagram" maxlength="40"/>
         </div>
         <div class="user-input data">
-            <label><i class="fab fa-whatsapp"></i></label><input type="number" class="input" placeholder="Teléfono" maxlength="15"/>
+            <label><i class="fab fa-whatsapp"></i></label><input id="phoneInput" type="number" class="input" placeholder="Teléfono" maxlength="15"/>
         </div>
     </form>
     <button id="continueToSubscribe" class="standard-bt">Continuar</button>
     `
     // opening subscribe modal
     continueToSubscribe.onclick = () => {
-        openModal(subscribe)
+        if(igInput.value || phoneInput.value){
+            openModal(subscribe)
+        } else {
+            openModal(basicModal, 'Debes ingresar un teléfono o usuario de instagram válido para adjudicar el premio en caso de ganar', 3)
+        }
     }
 }
 
@@ -166,9 +171,15 @@ SUBSCRIBE_OPTIONS.forEach( option => {
 })
 
 // toggle modals
-const openModal = (modal, msg) => {
+
+let basicModalTimeout = 0
+
+const openModal = (modal, msg, seconds) => {
     if(modal.id === 'basicModal'){
-        modal.firstElementChild.innerHTML = msg
+        modal.lastElementChild.innerHTML = msg
+        basicModalTimeout = setTimeout(() => {
+            closeModal(basicModal)
+        }, seconds * 1000)
     }
     modal.classList.remove('d-none')
     modalBg.classList.remove('d-none')
@@ -186,6 +197,16 @@ const openModal = (modal, msg) => {
     )
 }
 const closeModal = (modal) => {
+    if (basicModalTimeout) {
+        clearTimeout(basicModalTimeout);
+        basicModalTimeout = 0;
+    }
+    if(modal.id === 'subscribe'){
+        setTimeout(() => {
+            openModal(basicModal, "Papuuuu, como andaa Papuuu?", 3)
+            myAudio.play()
+        }, 500)
+    }
     modal.classList.remove('active')
     setTimeout(
         () => {
@@ -258,7 +279,7 @@ const goTo = url => {
 continueToVote.onclick = () => {
     voteContent.innerHTML = votation
     voteSubmit.onclick = () => {
-        openModal(basicModal, 'Tu voto fué emitido y estás participando del sorteo.<br>Se llamará al numero registrado o al usuario de instagram para anunciar al ganador y corroborar identidad')
+        openModal(basicModal, 'Tu voto fué procesado correctamente.<br><br>Ya estás participando del sorteo.', 4)
         voteContent.innerHTML = finalVoteContent
         localStorage.setItem('voted', true);
         dropLocalStorage.onclick = () => {
@@ -272,4 +293,6 @@ continueToVote.onclick = () => {
 const isLoading = bool => {
     loading.classList.toggle('visible', bool)
 }
-setTimeout(()=>{ isLoading(false) }, 600)
+setTimeout(()=>{
+    isLoading(false)
+}, 600)

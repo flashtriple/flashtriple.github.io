@@ -10,6 +10,9 @@
     <title>Stereo Tributo</title>
 </head>
 <body>
+    <audio id="myAudio">
+        <source src="/assets/sound/papu.ogg" type="audio/ogg">
+    </audio>
     <div id="loading" class="fixedBg visible"><div class="lds-dual-ring"></div></div>
     <div id="app">
         <main id="main" class="page-wrapper">
@@ -72,8 +75,8 @@
             </div>
         </div>
         <div class="modal d-none" id="basicModal">
+            <button class="modal-closer fs-1dot5" onclick='closeModal(basicModal)'><i class="fas fa-times"></i></button>
             <div class="simple-text fs-1dot5" id="modalMsg"></div>
-            <button class="standard-bt" onclick='closeModal(basicModal)'>Cerrar</button>
         </div>
     </div>
     <script src="assets/js/common.js" /></script>
