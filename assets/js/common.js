@@ -3,30 +3,92 @@
 // 3 - subscribe modal
 
 /* 1 - setup - start */
+const userLastVoteId = parseInt(localStorage.getItem('lastVoteId'))
+const userIg = localStorage.getItem('ig') === null ? false : localStorage.getItem('ig')
+const userPhone = parseInt(localStorage.getItem('phone'))
+const userSubscribe = JSON.parse(localStorage.getItem('subscribe'))
+const userVote = parseInt(localStorage.getItem('vote'))
+
+let user = {
+    ig: userIg,
+    phone: userPhone,
+    subscribe: userSubscribe,
+    vote: userVote,
+    lastVoteId: userLastVoteId
+}
+let votationId
+console.log(user)
 
 const finalVoteContent = 
 `
-<div class="simple-text fs-1dot25">Ya votaste y estás participando del sorteo<br><br>Te invitamos a seguirnos en las redes para estar en contacto y ver el material audiovisual.</div>
-<a class="social-bt" onclick="goTo('https://www.instagram.com/stereotributo/')"><i class="fab fa-instagram"></i>instagram @stereotributo</a>
-<a class="social-bt" onclick="goTo('https://www.youtube.com/channel/UCJwkofY0EYqYF51WvH0Tz3Q')"><i class="fab fa-youtube"></i>YouTube - Stereo Tributo</a>
-<a class="social-bt" onclick="goTo('https://www.facebook.com/TributoStereo/')"><i class="fab fa-facebook"></i>facebook/TributoStereo</a>
-<button id="dropLocalStorage" class="standard-bt">resetear prueba</button>`
+<p class="simple-text fs-1dot25">
+    Ya votaste y estás participando del sorteo.
+</p>
+<p class="simple-text fs-1dot25">
+    Te invitamos a seguirnos en las redes para estar en contacto y ver material de la banda.
+</p>
+<a class="social-bt" href="https://www.instagram.com/stereotributo/"><i class="fab fa-instagram"></i>instagram @stereotributo</a>
+<a class="social-bt" href="https://www.youtube.com/channel/UCJwkofY0EYqYF51WvH0Tz3Q"><i class="fab fa-youtube"></i>YouTube Stereo Tributo</a>
+<a class="social-bt" href="https://www.facebook.com/TributoStereo"><i class="fab fa-facebook"></i>facebook TributoStereo</a>
+<button id="dropLocalStorage" class="standard-bt">resetear prueba</button>
+<button id="changeLastVoteId" class="standard-bt">cambiar n° de última votación</button>
+`
+
+const votationQuery = () => {
+    votationId = 1 // actualizar con valor de fetch
+    return (
+        `
+        <p class="simple-text fs-1dot25">Elejí una canción</p>
+        <div id="voteCardsWrapper">
+            <div class="vote-card" data-value="1">
+                <div class="vote-card__transparent-layer"></div>
+                <div class="vote-card__img" style="background-image: url('img/options/1.jpg')"></div>
+                <div class="vote-card__info">
+                    <div class="vote-card__info__title">Canción animal</div>
+                    <div class="vote-card__info__artist">Soda Stereo</div>
+                    <div class="vote-card__info__album">Canción animal</div>
+                    <div class="vote-card__info__date">1990</div>
+                </div>
+            </div>
+            <div class="vote-card" data-value="2">
+                <div class="vote-card__transparent-layer"></div>
+                <div class="vote-card__img" style="background-image: url('img/options/2.jpg')"></div>
+                <div class="vote-card__info">
+                    <div class="vote-card__info__title">Signos</div>
+                    <div class="vote-card__info__artist">Soda Stereo</div>
+                    <div class="vote-card__info__album">Signos</div>
+                    <div class="vote-card__info__date">1986</div>
+                </div>
+            </div>
+        </div>
+        <button id="voteSubmit" class="standard-bt">Votar</button>
+        `
+    )
+}
+const votation = votationQuery()
+
 // vote verification
-if(localStorage.getItem('voted')){
+
+if(user.lastVoteId === votationId){
     voteContent.innerHTML = finalVoteContent
     dropLocalStorage.onclick = () => {
         localStorage.clear()
         location.reload()
     }
+    changeLastVoteId.onclick = () => {
+        localStorage.setItem('lastVoteId', 0)
+        location.reload()
+    }
 } else {
     voteContent.innerHTML = `
-    <p class="simple-text">Para registrar el voto y participar del sorteo, necesitamos número de teléfono o usuario de instagram. Se eliminarán los datos luego de finalizado el sorteo.</p>
+    <div></div>
+    <p class="simple-text fs-1dot25">Para votar y participar del sorteo ingresá tu número de teléfono y/o usuario de instagram. Finalizado el sorteo, se eliminarán los datos.</p>
     <form>
         <div class="user-input data">
-            <label>@</label><input id="igInput" type="text" class="input" placeholder="Usuario de instagram" maxlength="40"/>
+            <label><i class="fab fa-whatsapp"></i></label><input id="phoneInput" type="number" class="input" value="${user.phone}" placeholder="Teléfono" maxlength="15"/>
         </div>
         <div class="user-input data">
-            <label><i class="fab fa-whatsapp"></i></label><input id="phoneInput" type="number" class="input" placeholder="Teléfono" maxlength="15"/>
+            <label>@</label><input id="igInput" type="text" class="input" placeholder="Usuario de instagram" maxlength="40" value="${user.ig ? user.ig : ''}"/>
         </div>
     </form>
     <button id="continueToSubscribe" class="standard-bt">Continuar</button>
@@ -34,6 +96,10 @@ if(localStorage.getItem('voted')){
     // opening subscribe modal
     continueToSubscribe.onclick = () => {
         if(igInput.value || phoneInput.value){
+            user.phone = phoneInput.value
+            user.ig = igInput.value
+            user.phone && localStorage.setItem('phone', user.phone);
+            user.ig && localStorage.setItem('ig', user.ig);
             openModal(subscribe)
         } else {
             openModal(basicModal, 'Debes ingresar un teléfono o usuario de instagram válido para adjudicar el premio en caso de ganar', 3)
@@ -96,7 +162,6 @@ let BUTTON_TAGS = ['BUTTON', 'I']
 nav.onclick = (e) => {
     if(BUTTON_TAGS.includes(e.target.tagName)){
         let item = e.target
-        console.log(item)
         if(item.tagName === 'I'){
             item = item.parentElement
         }
@@ -118,42 +183,6 @@ nav.onclick = (e) => {
 }
 /* 1 - nav constructor - end */
 
-/* 2 - form - start */
-
-// .void toggler for placeholder color
-/* const FORM_SELECTS = reportForm.querySelectorAll('select')
-FORM_SELECTS.forEach( input => {
-    input.onchange = () => {
-        !!input.value ? input.classList.toggle('void', false) : input.classList.toggle('void', false)
-    }
-}) */
-
-// showing preview pics
-/* const getImgData = () => {
-    const files = Object.values(imagesInput.files)
-    imagesPreview.innerHTML = ''
-    if(files){
-        files.forEach( file => {
-            const fileReader = new FileReader();
-            fileReader.readAsDataURL(file);
-            fileReader.onload = e => {
-                imagesPreview.innerHTML += `<img class="input" src="${e.target.result}" />`;
-            }
-        });
-    }
-}
-imagesInput.onchange = () => {
-    getImgData()
-} */
-
-/* 2 - form - end */
-
-/* 3 - subscribe modal - start */
-
-
-/* 3 - subscribe modal - end */
-
-
 // set class to checked radio item and show continueToVote button
 let optionSelected = false
 const SUBSCRIBE_OPTIONS = subscribeWrapper.querySelectorAll('.subscribe-option') 
@@ -163,6 +192,7 @@ SUBSCRIBE_OPTIONS.forEach( option => {
             option.parentElement.classList.toggle('checked', false)
         })
         if(e.target.checked){
+            user.subscribe = e.target.value
             optionSelected = true
             e.target.parentElement.classList.toggle('checked', true)
         }
@@ -172,8 +202,7 @@ SUBSCRIBE_OPTIONS.forEach( option => {
 
 // toggle modals
 
-let basicModalTimeout = 0
-
+let basicModalTimeout = false
 const openModal = (modal, msg, seconds) => {
     if(modal.id === 'basicModal'){
         modal.lastElementChild.innerHTML = msg
@@ -199,13 +228,7 @@ const openModal = (modal, msg, seconds) => {
 const closeModal = (modal) => {
     if (basicModalTimeout) {
         clearTimeout(basicModalTimeout);
-        basicModalTimeout = 0;
-    }
-    if(modal.id === 'subscribe'){
-        setTimeout(() => {
-            openModal(basicModal, "Papuuuu, como andaa Papuuu?", 3)
-            myAudio.play()
-        }, 500)
+        basicModalTimeout = false;
     }
     modal.classList.remove('active')
     setTimeout(
@@ -222,46 +245,13 @@ const closeModal = (modal) => {
         300
     )
 }
+
 // canceling modal
 modalBg.onclick = () => {
     closeModal(document.querySelector('.modal.active'))
 }
 
 // inserting vote content and closing subscribeWrapper
-const votationQuery = () => {
-    return (
-        `
-        <div id="voteCardsWrapper">
-            <div class="vote-card">
-                <div class="vote-card__transparent-layer"></div>
-                <input hidden id="option1" class="vote-option" name="votation" type="radio" value="1" />
-                <div class="vote-card__img" style="background-image: url('img/options/1.jpg')"></div>
-                <div class="vote-card__info">
-                    <div class="vote-card__info__title">Canción animal</div>
-                    <div class="vote-card__info__artist">Soda Stereo</div>
-                    <div class="vote-card__info__album">Canción animal</div>
-                    <div class="vote-card__info__date">1990</div>
-                </div>
-            </div>
-            <div class="vote-card">
-                <div class="vote-card__transparent-layer"></div>
-                <input hidden id="option2" class="vote-option" name="votation" type="radio" value="2" />
-                <div class="vote-card__img" style="background-image: url('img/options/2.jpg')"></div>
-                <div class="vote-card__info">
-                    <div class="vote-card__info__title">Signos</div>
-                    <div class="vote-card__info__artist">Soda Stereo</div>
-                    <div class="vote-card__info__album">Signos</div>
-                    <div class="vote-card__info__date">1986</div>
-                </div>
-            </div>
-        </div>
-        <button id="voteSubmit" class="standard-bt">Votar</button>
-        `
-    )
-}
-
-const votation = votationQuery()
-
 const votationSetup = () => {
     voteCardsWrapper.onclick = (e) => {
         if(e.target.classList.contains('vote-card__transparent-layer') && !e.target.parentElement.classList.contains('selected')){
@@ -272,19 +262,31 @@ const votationSetup = () => {
         }
     }
 }
-
 const goTo = url => {
     window.open(url, '_blank')
 }
 continueToVote.onclick = () => {
+    localStorage.setItem('subscribe', user.subscribe);
     voteContent.innerHTML = votation
     voteSubmit.onclick = () => {
-        openModal(basicModal, 'Tu voto fué procesado correctamente.<br><br>Ya estás participando del sorteo.', 4)
-        voteContent.innerHTML = finalVoteContent
-        localStorage.setItem('voted', true);
-        dropLocalStorage.onclick = () => {
-            localStorage.clear()
-            location.reload()
+        if(voteCardsWrapper.querySelector('.selected')){
+            isLoading(true)
+            user.vote = voteCardsWrapper.querySelector('.selected').dataset.value
+            openModal(basicModal, 'Tu voto fué procesado correctamente.<br><br>Ya estás participando del sorteo.', 4)
+            localStorage.setItem(`vote`, user.vote);
+            localStorage.setItem(`lastVoteId`, votationId);
+            voteContent.innerHTML = finalVoteContent
+            isLoading(false)
+            dropLocalStorage.onclick = () => {
+                localStorage.clear()
+                location.reload()
+            }
+            changeLastVoteId.onclick = () => {
+                localStorage.setItem('lastVoteId', 0)
+                location.reload()
+            }
+        } else {
+            openModal(basicModal, 'Debes seleccionar una canción para votar y participar del sorteo', 4)
         }
     }
     setTimeout(() => { closeModal(subscribe) }, 200)
