@@ -34,10 +34,11 @@ const finalVoteContent =
 `
 
 let votation = ''
+const URL_votationQuery = 'api/votation.json'
 
 const votationQuery = () => {
     let cards = ''
-    fetch('api/votation.php')
+    fetch(URL_votationQuery)
     .then(res => res.json())
     .then(data => {
             votationId = data.votationId
