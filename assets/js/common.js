@@ -83,7 +83,7 @@ const votationQuery = () => {
                 cards += 
                 `<div class="vote-card" data-value="${song.id}">
                     <div class="vote-card__transparent-layer"></div>
-                    <div class="vote-card__img" style="background-image: url('img/options/${song.img}.jpg')"></div>
+                    <div class="vote-card__img" style="background-image: url('img/options/${song.img}')"></div>
                     <div class="vote-card__info">
                         <div class="vote-card__info__title">${song.name}</div>
                         <div class="vote-card__info__artist">${song.artist}</div>
