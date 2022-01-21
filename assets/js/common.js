@@ -41,6 +41,43 @@ const votationQuery = () => {
     .then(res => res.json())
     .then(data => {
             votationId = data.votationId
+            if(user.lastVoteId === votationId){
+                voteContent.innerHTML = finalVoteContent
+                dropLocalStorage.onclick = () => {
+                    localStorage.clear()
+                    location.reload()
+                }
+                changeLastVoteId.onclick = () => {
+                    localStorage.setItem('lastVoteId', 0)
+                    location.reload()
+                }
+            } else {
+                voteContent.innerHTML = `
+                <div></div>
+                <p class="simple-text fs-1dot25">Para votar y participar del sorteo ingresá tu número de teléfono y/o usuario de instagram. Finalizado el sorteo, se eliminarán los datos.</p>
+                <form>
+                    <div class="user-input data">
+                        <label><i class="fab fa-whatsapp"></i></label><input id="phoneInput" type="number" class="input" value="${user.phone}" placeholder="Teléfono" maxlength="15"/>
+                    </div>
+                    <div class="user-input data">
+                        <label>@</label><input id="igInput" type="text" class="input" placeholder="Usuario de instagram" maxlength="40" value="${user.ig ? user.ig : ''}"/>
+                    </div>
+                </form>
+                <button id="continueToSubscribe" class="standard-bt">Continuar</button>
+                `
+                // opening subscribe modal
+                continueToSubscribe.onclick = () => {
+                    if(igInput.value || phoneInput.value){
+                        user.phone = phoneInput.value
+                        user.ig = igInput.value
+                        user.phone && localStorage.setItem('phone', user.phone);
+                        user.ig && localStorage.setItem('ig', user.ig);
+                        openModal(subscribe)
+                    } else {
+                        openModal(basicModal, 'Debes ingresar un teléfono o usuario de instagram válido para adjudicar el premio en caso de ganar', 3)
+                    }
+                }
+            }
             data.nominees.forEach(song => {
                 cards += 
                 `<div class="vote-card" data-value="${song.id}">
@@ -69,43 +106,6 @@ const votationQuery = () => {
 votationQuery()
 // vote verification
 
-if(user.lastVoteId === votationId){
-    voteContent.innerHTML = finalVoteContent
-    dropLocalStorage.onclick = () => {
-        localStorage.clear()
-        location.reload()
-    }
-    changeLastVoteId.onclick = () => {
-        localStorage.setItem('lastVoteId', 0)
-        location.reload()
-    }
-} else {
-    voteContent.innerHTML = `
-    <div></div>
-    <p class="simple-text fs-1dot25">Para votar y participar del sorteo ingresá tu número de teléfono y/o usuario de instagram. Finalizado el sorteo, se eliminarán los datos.</p>
-    <form>
-        <div class="user-input data">
-            <label><i class="fab fa-whatsapp"></i></label><input id="phoneInput" type="number" class="input" value="${user.phone}" placeholder="Teléfono" maxlength="15"/>
-        </div>
-        <div class="user-input data">
-            <label>@</label><input id="igInput" type="text" class="input" placeholder="Usuario de instagram" maxlength="40" value="${user.ig ? user.ig : ''}"/>
-        </div>
-    </form>
-    <button id="continueToSubscribe" class="standard-bt">Continuar</button>
-    `
-    // opening subscribe modal
-    continueToSubscribe.onclick = () => {
-        if(igInput.value || phoneInput.value){
-            user.phone = phoneInput.value
-            user.ig = igInput.value
-            user.phone && localStorage.setItem('phone', user.phone);
-            user.ig && localStorage.setItem('ig', user.ig);
-            openModal(subscribe)
-        } else {
-            openModal(basicModal, 'Debes ingresar un teléfono o usuario de instagram válido para adjudicar el premio en caso de ganar', 3)
-        }
-    }
-}
 
 // nav constructor
 
