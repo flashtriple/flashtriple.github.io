@@ -17,7 +17,6 @@ let user = {
     lastVoteId: userLastVoteId
 }
 let votationId
-console.log(user)
 
 const finalVoteContent = 
 `
@@ -34,39 +33,40 @@ const finalVoteContent =
 <button id="changeLastVoteId" class="standard-bt">cambiar n° de última votación</button>
 `
 
-const votationQuery = () => {
-    votationId = 1 // actualizar con valor de fetch
-    return (
-        `
-        <p class="simple-text fs-1dot25">Elejí una canción</p>
-        <div id="voteCardsWrapper">
-            <div class="vote-card" data-value="1">
-                <div class="vote-card__transparent-layer"></div>
-                <div class="vote-card__img" style="background-image: url('img/options/1.jpg')"></div>
-                <div class="vote-card__info">
-                    <div class="vote-card__info__title">Canción animal</div>
-                    <div class="vote-card__info__artist">Soda Stereo</div>
-                    <div class="vote-card__info__album">Canción animal</div>
-                    <div class="vote-card__info__date">1990</div>
-                </div>
-            </div>
-            <div class="vote-card" data-value="2">
-                <div class="vote-card__transparent-layer"></div>
-                <div class="vote-card__img" style="background-image: url('img/options/2.jpg')"></div>
-                <div class="vote-card__info">
-                    <div class="vote-card__info__title">Signos</div>
-                    <div class="vote-card__info__artist">Soda Stereo</div>
-                    <div class="vote-card__info__album">Signos</div>
-                    <div class="vote-card__info__date">1986</div>
-                </div>
-            </div>
-        </div>
-        <button id="voteSubmit" class="standard-bt">Votar</button>
-        `
-    )
-}
-const votation = votationQuery()
+let votation = ''
 
+const votationQuery = () => {
+    let cards = ''
+    fetch('api/votation.php')
+    .then(res => res.json())
+    .then(data => {
+            votationId = data.votationId
+            data.nominees.forEach(song => {
+                cards += 
+                `<div class="vote-card" data-value="${song.id}">
+                    <div class="vote-card__transparent-layer"></div>
+                    <div class="vote-card__img" style="background-image: url('img/options/${song.img}.jpg')"></div>
+                    <div class="vote-card__info">
+                        <div class="vote-card__info__title">${song.name}</div>
+                        <div class="vote-card__info__artist">${song.artist}</div>
+                        <div class="vote-card__info__album">${song.album}</div>
+                        <div class="vote-card__info__date">${song.year}</div>
+                    </div>
+                </div>`
+            })
+            votation = 
+            `
+            <p class="simple-text fs-1dot25">Elejí una canción</p>
+            <div id="voteCardsWrapper">
+                ${cards}
+            </div>
+            <button id="voteSubmit" class="standard-bt">Votar</button>
+            `
+        }
+    )
+    .catch(error => console.error(error)) 
+}
+votationQuery()
 // vote verification
 
 if(user.lastVoteId === votationId){
@@ -265,7 +265,7 @@ const votationSetup = () => {
 const goTo = url => {
     window.open(url, '_blank')
 }
-continueToVote.onclick = () => {
+continueToVote.onclick = async () => {
     localStorage.setItem('subscribe', user.subscribe);
     voteContent.innerHTML = votation
     voteSubmit.onclick = () => {
