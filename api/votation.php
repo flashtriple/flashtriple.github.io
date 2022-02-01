@@ -2,7 +2,6 @@
 require 'conn.php';
 require 'header_json.php';
 require 'functions/get_votation_id.php';
-require 'functions/get_song.php';
 
 if($conn->connect_errno){
     $response = [
@@ -11,13 +10,24 @@ if($conn->connect_errno){
 } else {
     $conn->set_charset('utf8mb4');
     $votationId = getVotationId($conn);
-    $statement = $conn->prepare("SELECT * FROM nominations WHERE votation = $votationId");
+    $statement = $conn->
+    prepare("SELECT
+    songs.id,
+    songs.name,
+    songs.artist as artistId,
+    artists.name as artist,
+    albums.name as album,
+    IF(albums.year, albums.year, songs.year) as year,
+    imgs.url as img
+    FROM songs
+    LEFT JOIN artists ON songs.artist = artists.id
+    LEFT JOIN albums ON songs.album = albums.id
+    LEFT JOIN imgs ON IF(songs.album, albums.img, songs.img) = imgs.id
+    WHERE songs.id IN (SELECT song FROM nominations WHERE votation IN (SELECT $votationId FROM votations))");
     $statement->execute();
     $results = $statement->get_result();
-    
     $nominees = [];
-    while($row = $results->fetch_assoc()){
-        $nomination = getSong($conn, $row['song']);
+    while($nomination = $results->fetch_assoc()){
         array_push($nominees, $nomination);
     };
     $response = [

@@ -10,7 +10,7 @@
     <title>Stereo Tributo</title>
 </head>
 <body>
-    <div id="loading" class="fixedBg visible"><div class="lds-dual-ring"></div></div>
+    <div id="displayLoading" class="fixedBg visible"><div class="lds-dual-ring"></div></div>
     <div id="app">
         <main id="main" class="page-wrapper">
             <div class="header">
@@ -27,18 +27,6 @@
             <section id="vote" class="page-wrapper">
                 <div id="voteContent" class="content">
                 </div>
-            </section>
-            <section id="news" class="page-wrapper">
-            </section>
-            <section id="social" class="page-wrapper">
-                <form id="voteForm">
-                    <input type="file" id="imagesInput" name="images" maxlength="10" accept="image/*" multiple hidden/>
-                    <label class="imagesBt" for="imagesInput">Cargar fotos</label>
-                    <div id="imagesPreview"></div>
-                    <input type="submit" class="input">
-                </form>
-            </section>
-            <section id="contact" class="page-wrapper">
             </section>
         </main>
         <div id="nav-wrapper">
@@ -57,7 +45,7 @@
                         <input hidden id="subscribeTrue" class="subscribe-option" name="subscribe" type="radio" value="true">
                         <label for="subscribeTrue" class="fs-1dot25">
                             <div class="radio-mark"></div>
-                            Sí, por favor.
+                            Sí, quiero.
                         </label>
                     </div>
                     <div class="user-input radio">
@@ -72,12 +60,11 @@
             </div>
         </div>
         <div class="modal d-none" id="basicModal">
-            <button class="modal-closer fs-1dot5" onclick='closeModal(basicModal)'><i class="fas fa-times"></i></button>
+            <button class="modal-closer fs-1dot5"><i class="fas fa-times" id="closeBasicModal"></i></button>
             <div class="simple-text fs-1dot5" id="modalMsg"></div>
         </div>
     </div>
-    <script src="assets/js/common.js" /></script>
     <script src="https://kit.fontawesome.com/063612c7b0.js" crossorigin="anonymous"></script>
+    <script src="assets/js/common.js" /></script>
 </body>
 </html>
-<!-- <button id="toInstagram" class="standard-bt">instagram</button> -->

@@ -578,13 +578,13 @@ input[type=number] {
 }
 
 /* spinner */
-#loading {
+#displayLoading {
     display: none;
     background-color: var(--background-c);
     align-items: center;
     justify-content: center;
 }
-#loading.visible {
+#displayLoading.visible {
     display: flex !important;
 }
 

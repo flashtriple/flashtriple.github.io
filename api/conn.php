@@ -1,1 +1,1 @@
-<?php $conn = new mysqli('localhost', 'root', '', 'stereo'); ?>
+<?php $conn = new mysqli('localhost', 'c2480276_stereo', 'rootUserPassword123', 'c2480276_stereo'); ?>
